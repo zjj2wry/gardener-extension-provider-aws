@@ -12,7 +12,7 @@ require (
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/frankban/quicktest v1.9.0 // indirect
 	github.com/gardener/etcd-druid v0.1.15
-	github.com/gardener/gardener v1.4.1
+	github.com/gardener/gardener v1.6.2
 	github.com/gardener/machine-controller-manager v0.27.0
 	github.com/go-logr/logr v0.1.0
 	github.com/gobuffalo/packr/v2 v2.8.0
@@ -22,8 +22,8 @@ require (
 	github.com/google/go-cmp v0.4.0
 	github.com/mitchellh/copystructure v1.1.1 // indirect
 	github.com/nwaples/rardecode v1.1.0 // indirect
-	github.com/onsi/ginkgo v1.10.1
-	github.com/onsi/gomega v1.7.0
+	github.com/onsi/ginkgo v1.11.0
+	github.com/onsi/gomega v1.8.1
 	github.com/pierrec/lz4 v2.4.1+incompatible // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.4.2
@@ -31,9 +31,9 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/ulikunitz/xz v0.5.7 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
-	k8s.io/api v0.16.8
-	k8s.io/apiextensions-apiserver v0.17.0
-	k8s.io/apimachinery v0.17.0
+	k8s.io/api v0.17.2
+	k8s.io/apiextensions-apiserver v0.17.2
+	k8s.io/apimachinery v0.17.2
 	k8s.io/apiserver v0.16.8
 	k8s.io/autoscaler v0.0.0-20190805135949-100e91ba756e
 	k8s.io/client-go v11.0.1-0.20190409021438-1a26190bd76a+incompatible
@@ -44,7 +44,7 @@ require (
 	k8s.io/klog v1.0.0
 	k8s.io/kubelet v0.16.8
 	k8s.io/utils v0.0.0-20200327001022-6496210b90e8
-	sigs.k8s.io/controller-runtime v0.4.0
+	sigs.k8s.io/controller-runtime v0.5.5
 )
 
 replace (
