@@ -936,6 +936,17 @@ string
 <p>SecurityGroups is a list of security groups that have been created.</p>
 </td>
 </tr>
+<tr>
+<td>
+<code>natIps</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<p>NatIPs is a list of VPC NAT gateway public IPs</p>
+</td>
+</tr>
 </tbody>
 </table>
 <h3 id="aws.provider.extensions.gardener.cloud/v1alpha1.Volume">Volume

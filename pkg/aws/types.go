@@ -74,6 +74,8 @@ const (
 	IAMInstanceProfileBastions = "iamInstanceProfileBastions"
 	// NodesRole role for nodes
 	NodesRole = "nodes_role_arn"
+	// NatIpPrefix is the prefix for the nat public ip output
+	NatIpPrefix = "nat_ip"
 	// BastionsRole role for bastions
 	BastionsRole = "bastions_role_arn"
 

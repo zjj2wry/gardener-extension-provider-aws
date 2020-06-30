@@ -656,6 +656,7 @@ func autoConvert_v1alpha1_VPCStatus_To_aws_VPCStatus(in *VPCStatus, out *aws.VPC
 	out.ID = in.ID
 	out.Subnets = *(*[]aws.Subnet)(unsafe.Pointer(&in.Subnets))
 	out.SecurityGroups = *(*[]aws.SecurityGroup)(unsafe.Pointer(&in.SecurityGroups))
+	out.NatIPs = *(*[]string)(unsafe.Pointer(&in.NatIPs))
 	return nil
 }
 
@@ -668,6 +669,7 @@ func autoConvert_aws_VPCStatus_To_v1alpha1_VPCStatus(in *aws.VPCStatus, out *VPC
 	out.ID = in.ID
 	out.Subnets = *(*[]Subnet)(unsafe.Pointer(&in.Subnets))
 	out.SecurityGroups = *(*[]SecurityGroup)(unsafe.Pointer(&in.SecurityGroups))
+	out.NatIPs = *(*[]string)(unsafe.Pointer(&in.NatIPs))
 	return nil
 }
 

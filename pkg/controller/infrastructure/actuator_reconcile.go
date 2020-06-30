@@ -217,6 +217,7 @@ func computeProviderStatus(ctx context.Context, tf terraformer.Terraformer, infr
 	for zoneIndex := range infrastructureConfig.Networks.Zones {
 		outputVarKeys = append(outputVarKeys, fmt.Sprintf("%s%d", aws.SubnetNodesPrefix, zoneIndex))
 		outputVarKeys = append(outputVarKeys, fmt.Sprintf("%s%d", aws.SubnetPublicPrefix, zoneIndex))
+		outputVarKeys = append(outputVarKeys, fmt.Sprintf("%s%d", aws.NatIpPrefix, zoneIndex))
 	}
 
 	output, err := tf.GetStateOutputVariables(outputVarKeys...)
@@ -227,6 +228,12 @@ func computeProviderStatus(ctx context.Context, tf terraformer.Terraformer, infr
 	subnets, err := computeProviderStatusSubnets(infrastructureConfig, output)
 	if err != nil {
 		return nil, nil, err
+	}
+	natIps := []string{}
+	for k, v := range output {
+		if strings.HasPrefix(k, aws.NatIpPrefix) {
+			natIps = append(natIps, v)
+		}
 	}
 
 	return &awsv1alpha1.InfrastructureStatus{
@@ -243,6 +250,7 @@ func computeProviderStatus(ctx context.Context, tf terraformer.Terraformer, infr
 					ID:      output[aws.SecurityGroupsNodes],
 				},
 			},
+			NatIPs: natIps,
 		},
 		EC2: awsv1alpha1.EC2{
 			KeyName: output[aws.SSHKeyName],

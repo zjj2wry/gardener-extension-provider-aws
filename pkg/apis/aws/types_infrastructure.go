@@ -99,6 +99,8 @@ type VPCStatus struct {
 	Subnets []Subnet
 	// SecurityGroups is a list of security groups that have been created.
 	SecurityGroups []SecurityGroup
+	// NatIPs is a list of VPC NAT gateway public IPs
+	NatIPs []string
 }
 
 const (

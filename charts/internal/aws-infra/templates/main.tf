@@ -201,6 +201,10 @@ resource "aws_nat_gateway" "natgw_z{{ $index }}" {
   }
 }
 
+output "{{ $.Values.outputKeys.natIpPrefix }}{{ $index }}" {
+  value = "${aws_nat_gateway.natgw_z{{ $index }}.public_ip}"
+}
+
 resource "aws_route_table" "routetable_private_utility_z{{ $index }}" {
   vpc_id = "{{ required "vpc.id is required" $.Values.vpc.id }}"
 

@@ -416,6 +416,11 @@ func (in *VPCStatus) DeepCopyInto(out *VPCStatus) {
 		*out = make([]SecurityGroup, len(*in))
 		copy(*out, *in)
 	}
+	if in.NatIPs != nil {
+		in, out := &in.NatIPs, &out.NatIPs
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 

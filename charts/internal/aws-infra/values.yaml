@@ -36,3 +36,4 @@ outputKeys:
   iamInstanceProfileBastions: iamInstanceProfileBastions
   nodesRole: nodes_role_arn
   bastionsRole: bastions_role_arn
+  natIpPrefix: nat_ip
