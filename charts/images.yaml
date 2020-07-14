@@ -19,9 +19,9 @@ images:
   tag: "v1.18.0"
   targetVersion: ">= 1.18"
 - name: machine-controller-manager
-  sourceRepository: github.com/gardener/machine-controller-manager
-  repository: eu.gcr.io/gardener-project/gardener/machine-controller-manager
-  tag: "v0.27.0"
+  sourceRepository: github.com/pingcap/machine-controller-manager
+  repository: gcr.io/pingcap-public/gardener/machine-controller-manager
+  tag: "v0.29.0-dev.1"
 - name: aws-lb-readvertiser
   sourceRepository: github.com/gardener/aws-lb-readvertiser
   repository: eu.gcr.io/gardener-project/gardener/aws-lb-readvertiser

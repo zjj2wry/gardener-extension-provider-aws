@@ -1,3 +1,13 @@
+# Fork of Gardener Extension for AWS provider
+
+Release:
+
+```
+echo ${version} > VERSION
+make docker-images
+make docker-push
+```
+
 # [Gardener Extension for AWS provider](https://gardener.cloud)
 
 [![CI Build status](https://concourse.ci.gardener.cloud/api/v1/teams/gardener/pipelines/gardener-extension-provider-aws-master/jobs/master-head-update-job/badge)](https://concourse.ci.gardener.cloud/teams/gardener/pipelines/gardener-extension-provider-aws-master/jobs/master-head-update-job)
