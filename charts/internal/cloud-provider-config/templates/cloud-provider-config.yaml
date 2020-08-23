@@ -8,7 +8,7 @@ data:
     [Global]
     VPC="{{ .Values.vpcID }}"
     SubnetID="{{ .Values.subnetID }}"
-    DisableSecurityGroupIngress=true
+    DisableSecurityGroupIngress=false
     KubernetesClusterTag="{{ .Values.clusterName }}"
     KubernetesClusterID="{{ .Values.clusterName }}"
     Zone="{{ .Values.zone }}"
