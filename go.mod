@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/ahmetb/gen-crd-api-reference-docs v0.1.5
-	github.com/aws/aws-sdk-go v1.21.10
+	github.com/aws/aws-sdk-go v1.23.13
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f
 	github.com/frankban/quicktest v1.9.0 // indirect
 	github.com/gardener/etcd-druid v0.1.15
