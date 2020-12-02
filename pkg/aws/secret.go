@@ -60,9 +60,7 @@ func ReadCredentialsSecret(secret *corev1.Secret) (*Credentials, error) {
 // NewClientFromSecretRef creates a new Client for the given AWS credentials from given k8s <secretRef> and
 // the AWS region <region>.
 func NewClientFromSecretRef(ctx context.Context, client client.Client, secretRef corev1.SecretReference, region string) (awsclient.Interface, error) {
-	credentials, err := GetCredentialsFromSecretRef(ctx, client, secretRef)
-	if err != nil {
-		return nil, err
-	}
+	credentials, _ := GetCredentialsFromSecretRef(ctx, client, secretRef)
+
 	return awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), region)
 }

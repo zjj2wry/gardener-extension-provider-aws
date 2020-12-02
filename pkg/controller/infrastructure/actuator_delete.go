@@ -65,14 +65,19 @@ func Delete(
 		return fmt.Errorf("error while checking whether terraform config exists: %+v", err)
 	}
 
-	credentials, err := aws.GetCredentialsFromSecretRef(ctx, c, infrastructure.Spec.SecretRef)
-	if err != nil {
-		return err
-	}
+	credentials, _ := aws.GetCredentialsFromSecretRef(ctx, c, infrastructure.Spec.SecretRef)
+	var awsClient awsclient.Interface
 
-	awsClient, err := awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), infrastructure.Spec.Region)
-	if err != nil {
-		return err
+	if credentials != nil {
+		awsClient, err = awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), infrastructure.Spec.Region)
+		if err != nil {
+			return err
+		}
+	} else {
+		awsClient, err = awsclient.NewClient("", "", infrastructure.Spec.Region)
+		if err != nil {
+			return err
+		}
 	}
 
 	var (

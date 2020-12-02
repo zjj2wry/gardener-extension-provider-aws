@@ -62,11 +62,13 @@ type LoadBalancer struct {
 // It initializes the clients for the various services like EC2, ELB, etc.
 func NewClient(accessKeyID, secretAccessKey, region string) (Interface, error) {
 	var (
-		awsConfig = &aws.Config{
-			Credentials: credentials.NewStaticCredentials(accessKeyID, secretAccessKey, ""),
-		}
-		config = &aws.Config{Region: aws.String(region)}
+		awsConfig = &aws.Config{}
+		config    = &aws.Config{Region: aws.String(region)}
 	)
+
+	if accessKeyID != "" && secretAccessKey != "" {
+		awsConfig.Credentials = credentials.NewStaticCredentials(accessKeyID, secretAccessKey, "")
+	}
 
 	s, err := session.NewSession(awsConfig)
 	if err != nil {
