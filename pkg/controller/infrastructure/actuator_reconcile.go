@@ -64,7 +64,7 @@ func Reconcile(
 	error,
 ) {
 
-	credentials, _ := aws.GetCredentialsFromSecretRef(ctx, c, infrastructure.Spec.SecretRef)
+	credentials := aws.GetCredentialsFromSecretRef(ctx, c, infrastructure.Spec.SecretRef)
 
 	infrastructureConfig := &awsapi.InfrastructureConfig{}
 	if _, _, err := decoder.Decode(infrastructure.Spec.ProviderConfig.Raw, nil, infrastructureConfig); err != nil {
