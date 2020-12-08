@@ -27,12 +27,17 @@ import (
 
 // GetCredentialsFromSecretRef reads the secret given by the the secret reference and returns the read Credentials
 // object.
-func GetCredentialsFromSecretRef(ctx context.Context, client client.Client, secretRef corev1.SecretReference) (*Credentials, error) {
+func GetCredentialsFromSecretRef(ctx context.Context, client client.Client, secretRef corev1.SecretReference) *Credentials {
 	secret, err := extensionscontroller.GetSecretByReference(ctx, client, &secretRef)
 	if err != nil {
-		return nil, err
+		return &Credentials{}
 	}
-	return ReadCredentialsSecret(secret)
+
+	cdtl, err := ReadCredentialsSecret(secret)
+	if err != nil {
+		return &Credentials{}
+	}
+	return cdtl
 }
 
 // ReadCredentialsSecret reads a secret containing credentials.
@@ -60,9 +65,7 @@ func ReadCredentialsSecret(secret *corev1.Secret) (*Credentials, error) {
 // NewClientFromSecretRef creates a new Client for the given AWS credentials from given k8s <secretRef> and
 // the AWS region <region>.
 func NewClientFromSecretRef(ctx context.Context, client client.Client, secretRef corev1.SecretReference, region string) (awsclient.Interface, error) {
-	credentials, err := GetCredentialsFromSecretRef(ctx, client, secretRef)
-	if err != nil {
-		return nil, err
-	}
+	credentials := GetCredentialsFromSecretRef(ctx, client, secretRef)
+
 	return awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), region)
 }

@@ -64,10 +64,7 @@ func Reconcile(
 	error,
 ) {
 
-	credentials, err := aws.GetCredentialsFromSecretRef(ctx, c, infrastructure.Spec.SecretRef)
-	if err != nil {
-		return nil, nil, err
-	}
+	credentials := aws.GetCredentialsFromSecretRef(ctx, c, infrastructure.Spec.SecretRef)
 
 	infrastructureConfig := &awsapi.InfrastructureConfig{}
 	if _, _, err := decoder.Decode(infrastructure.Spec.ProviderConfig.Raw, nil, infrastructureConfig); err != nil {
@@ -127,10 +124,15 @@ func generateTerraformInfraConfig(ctx context.Context, infrastructure *extension
 	case infrastructureConfig.Networks.VPC.ID != nil:
 		createVPC = false
 		vpcID = *infrastructureConfig.Networks.VPC.ID
-		awsClient, err := awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), infrastructure.Spec.Region)
+
+		var awsClient awsclient.Interface
+		var err error
+
+		awsClient, err = awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), infrastructure.Spec.Region)
 		if err != nil {
 			return nil, err
 		}
+
 		igwID, err := awsClient.GetInternetGateway(ctx, vpcID)
 		if err != nil {
 			return nil, err

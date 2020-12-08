@@ -62,15 +62,15 @@ var _ = Describe("Secret", func() {
 			ctrl.Finish()
 		})
 
-		It("should return an error because secret could not be read", func() {
+		It("should return an credentials object but ak sk is null because secret could not be read", func() {
 			fakeErr := errors.New("error")
 
 			c.EXPECT().Get(ctx, kutil.Key(namespace, name), gomock.AssignableToTypeOf(&corev1.Secret{})).Return(fakeErr)
 
-			credentials, err := GetCredentialsFromSecretRef(ctx, c, secretRef)
+			credentials := GetCredentialsFromSecretRef(ctx, c, secretRef)
 
-			Expect(credentials).To(BeNil())
-			Expect(err).To(Equal(fakeErr))
+			Expect(credentials.AccessKeyID).To(BeNil())
+			Expect(credentials.SecretAccessKey).To(BeNil())
 		})
 
 		It("should return the correct credentials object", func() {
@@ -87,13 +87,12 @@ var _ = Describe("Secret", func() {
 				return nil
 			})
 
-			credentials, err := GetCredentialsFromSecretRef(ctx, c, secretRef)
+			credentials := GetCredentialsFromSecretRef(ctx, c, secretRef)
 
 			Expect(credentials).To(Equal(&Credentials{
 				AccessKeyID:     accessKeyID,
 				SecretAccessKey: secretAccessKey,
 			}))
-			Expect(err).NotTo(HaveOccurred())
 		})
 	})
 
