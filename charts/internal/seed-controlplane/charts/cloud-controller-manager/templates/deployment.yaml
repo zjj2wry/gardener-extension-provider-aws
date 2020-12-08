@@ -115,6 +115,7 @@ spec:
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
+      serviceAccountName: cloud-controller-manager
       volumes:
       - name: cloud-controller-manager
         secret:
