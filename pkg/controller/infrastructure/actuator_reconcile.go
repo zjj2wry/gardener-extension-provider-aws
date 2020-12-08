@@ -128,16 +128,9 @@ func generateTerraformInfraConfig(ctx context.Context, infrastructure *extension
 		var awsClient awsclient.Interface
 		var err error
 
-		if credentials != nil {
-			awsClient, err = awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), infrastructure.Spec.Region)
-			if err != nil {
-				return nil, err
-			}
-		} else {
-			awsClient, err = awsclient.NewClient("", "", infrastructure.Spec.Region)
-			if err != nil {
-				return nil, err
-			}
+		awsClient, err = awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), infrastructure.Spec.Region)
+		if err != nil {
+			return nil, err
 		}
 
 		igwID, err := awsClient.GetInternetGateway(ctx, vpcID)
