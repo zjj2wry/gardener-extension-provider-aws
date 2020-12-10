@@ -41,6 +41,10 @@ func (in *ControllerConfiguration) DeepCopyInto(out *ControllerConfiguration) {
 		*out = new(healthcheckconfigv1alpha1.HealthCheckConfig)
 		**out = **in
 	}
+	if in.OverrideHelmValues != nil {
+		in, out := &in.OverrideHelmValues, &out.OverrideHelmValues
+		*out = (*in).DeepCopy()
+	}
 	return
 }
 
