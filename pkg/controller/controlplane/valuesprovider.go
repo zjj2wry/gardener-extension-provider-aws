@@ -480,8 +480,8 @@ func getCCMChartValues(
 		values["featureGates"] = cpConfig.CloudControllerManager.FeatureGates
 	}
 
-	overrideValues := helmvalues.HelmValuesFor(helmvalues.MachineControllerManager)
-
+	overrideValues := helmvalues.HelmValuesFor(helmvalues.CloudControllerManager)
+	logger.Info("override helm values for", "ccm", overrideValues)
 	return utils.MergeMaps(values, overrideValues), nil
 }
 

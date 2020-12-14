@@ -21,6 +21,7 @@ import (
 
 	"github.com/gardener/gardener-extension-provider-aws/pkg/aws"
 	extensionscontroller "github.com/gardener/gardener/extensions/pkg/controller"
+	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	"github.com/gardener/gardener-extension-provider-aws/pkg/helmvalues"
 	v1beta1constants "github.com/gardener/gardener/pkg/apis/core/v1beta1/constants"
@@ -55,6 +56,7 @@ var (
 			{Type: &rbacv1.ClusterRoleBinding{}, Name: fmt.Sprintf("extensions.gardener.cloud:%s:%s", aws.Name, aws.MachineControllerManagerName)},
 		},
 	}
+	logger = log.Log.WithName("aws-machine-controller-controller")
 )
 
 func (w *workerDelegate) GetMachineControllerManagerChartValues(ctx context.Context) (map[string]interface{}, error) {
@@ -74,7 +76,7 @@ func (w *workerDelegate) GetMachineControllerManagerChartValues(ctx context.Cont
 	}
 
 	overrideValues := helmvalues.HelmValuesFor(helmvalues.MachineControllerManager)
-
+	logger.Info("override helm values for", "mcm", overrideValues)
 	return utils.MergeMaps(valuas, overrideValues), nil
 }
 

@@ -177,8 +177,9 @@ func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 			reconcileOpts.Completed().Apply(&awscontrolplane.DefaultAddOptions.IgnoreOperationAnnotation)
 			reconcileOpts.Completed().Apply(&awsworker.DefaultAddOptions.IgnoreOperationAnnotation)
 			workerCtrlOpts.Completed().Apply(&awsworker.DefaultAddOptions.Controller)
-			helmvalues.Load(configFileOpts.Completed().Config.OverrideHelmValues)
 
+			helmvalues.Load(configFileOpts.Completed().Config.OverrideHelmValues)
+			fmt.Println("configFileOpts.Completed().Config.OverrideHelmValues", configFileOpts.Completed().Config.OverrideHelmValues)
 			_, shootWebhooks, err := webhookOptions.Completed().AddToManager(mgr)
 			if err != nil {
 				controllercmd.LogErrAndExit(err, "Could not add webhooks to manager")
