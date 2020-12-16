@@ -59,5 +59,6 @@ func generateTerraformInfraVariablesEnvironment(credentials *aws.Credentials) ma
 	return map[string]string{
 		"TF_VAR_ACCESS_KEY_ID":     string(credentials.AccessKeyID),
 		"TF_VAR_SECRET_ACCESS_KEY": string(credentials.SecretAccessKey),
+		"TF_VAR_SESSION_TOKEN":     credentials.SessionToken,
 	}
 }

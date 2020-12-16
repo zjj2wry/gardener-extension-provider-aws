@@ -128,4 +128,5 @@ var (
 type Credentials struct {
 	AccessKeyID     []byte
 	SecretAccessKey []byte
+	SessionToken    string
 }

@@ -17,6 +17,7 @@ package infrastructure
 import (
 	"context"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -27,6 +28,7 @@ import (
 	"github.com/gardener/gardener-extension-provider-aws/pkg/aws"
 	awsclient "github.com/gardener/gardener-extension-provider-aws/pkg/aws/client"
 
+	"github.com/aws/aws-sdk-go/service/sts"
 	extensionscontroller "github.com/gardener/gardener/extensions/pkg/controller"
 	controllererrors "github.com/gardener/gardener/extensions/pkg/controller/error"
 	"github.com/gardener/gardener/extensions/pkg/terraformer"
@@ -65,6 +67,31 @@ func Reconcile(
 ) {
 
 	credentials := aws.GetCredentialsFromSecretRef(ctx, c, infrastructure.Spec.SecretRef)
+
+	// if static credentials not used, we will trying assume role.
+	// aws client will call AssumeRole API to get temporary credentials
+	if string(credentials.AccessKeyID) == "" || string(credentials.SecretAccessKey) == "" {
+		awsClient, err := awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), "")
+		if err != nil {
+			return nil, nil, err
+		}
+
+		// An identifier for the assumed role session.
+		roleSessionName := "terraform_role_session_name"
+
+		roleArn := os.Getenv("AWS_ROLE_ARN")
+		ari := &sts.AssumeRoleInput{
+			RoleArn:         &roleArn,
+			RoleSessionName: &roleSessionName,
+		}
+		assumeRoleOutput, err := awsClient.AssumeRole(ari)
+		if err != nil {
+			return nil, nil, err
+		}
+		credentials.AccessKeyID = []byte(*assumeRoleOutput.Credentials.AccessKeyId)
+		credentials.SecretAccessKey = []byte(*assumeRoleOutput.Credentials.SecretAccessKey)
+		credentials.SessionToken = *assumeRoleOutput.Credentials.SessionToken
+	}
 
 	infrastructureConfig := &awsapi.InfrastructureConfig{}
 	if _, _, err := decoder.Decode(infrastructure.Spec.ProviderConfig.Raw, nil, infrastructureConfig); err != nil {
