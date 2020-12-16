@@ -1,6 +1,8 @@
 provider "aws" {
   access_key = "${var.ACCESS_KEY_ID}"
   secret_key = "${var.SECRET_ACCESS_KEY}"
+  // Session token for validating temporary credentials
+  token = "${var.SESSION_TOKEN}"
   region     = "{{ required "aws.region is required" .Values.aws.region }}"
 }
 
