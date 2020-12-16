@@ -27,6 +27,7 @@ import (
 	healthcheckconfig "github.com/gardener/gardener/extensions/pkg/controller/healthcheck/config"
 	healthcheckconfigv1alpha1 "github.com/gardener/gardener/extensions/pkg/controller/healthcheck/config/v1alpha1"
 	resource "k8s.io/apimachinery/pkg/api/resource"
+	unstructured "k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	componentbaseconfig "k8s.io/component-base/config"
@@ -89,6 +90,7 @@ func autoConvert_v1alpha1_ControllerConfiguration_To_config_ControllerConfigurat
 		return err
 	}
 	out.HealthCheckConfig = (*healthcheckconfig.HealthCheckConfig)(unsafe.Pointer(in.HealthCheckConfig))
+	out.OverrideHelmValues = (*unstructured.Unstructured)(unsafe.Pointer(in.OverrideHelmValues))
 	return nil
 }
 
@@ -103,6 +105,7 @@ func autoConvert_config_ControllerConfiguration_To_v1alpha1_ControllerConfigurat
 		return err
 	}
 	out.HealthCheckConfig = (*healthcheckconfigv1alpha1.HealthCheckConfig)(unsafe.Pointer(in.HealthCheckConfig))
+	out.OverrideHelmValues = (*unstructured.Unstructured)(unsafe.Pointer(in.OverrideHelmValues))
 	return nil
 }
 

@@ -19,6 +19,7 @@ import (
 
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	componentbaseconfig "k8s.io/component-base/config"
 )
 
@@ -35,6 +36,13 @@ type ControllerConfiguration struct {
 	ETCD ETCD
 	// HealthCheckConfig is the config for the health check controller
 	HealthCheckConfig *healthcheckconfig.HealthCheckConfig
+	// OverrideHelmValues used for add extra helm values for all component managed by aws-extension.
+	// for example
+	// kind: HelmValues
+	// machine-controller-manager:
+	//   serviceAccountAnnoations:
+	//     "eks.amazonaws.com/role-arn": "<aws role ID>"
+	OverrideHelmValues *unstructured.Unstructured
 }
 
 // ETCD is an etcd configuration.
