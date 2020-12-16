@@ -84,6 +84,24 @@ github.com/gardener/gardener/extensions/pkg/controller/healthcheck/config/v1alph
 <p>HealthCheckConfig is the config for the health check controller</p>
 </td>
 </tr>
+<tr>
+<td>
+<code>OverrideHelmValues</code></br>
+<em>
+<a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.15/#unstructured-unstructured-v1">
+Kubernetes meta/v1/unstructured.Unstructured
+</a>
+</em>
+</td>
+<td>
+<p>OverrideHelmValues used for add extra helm values for all component managed by aws-extension.
+for example
+kind: HelmValues
+machine-controller-manager:
+serviceAccountAnnoations:
+&ldquo;eks.amazonaws.com/role-arn&rdquo;: &ldquo;<aws role ID>&rdquo;</p>
+</td>
+</tr>
 </tbody>
 </table>
 <h3 id="aws.provider.extensions.config.gardener.cloud/v1alpha1.ETCD">ETCD

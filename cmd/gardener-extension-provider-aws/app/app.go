@@ -32,6 +32,7 @@ import (
 	awscontrolplaneexposure "github.com/gardener/gardener-extension-provider-aws/pkg/webhook/controlplaneexposure"
 
 	druidv1alpha1 "github.com/gardener/etcd-druid/api/v1alpha1"
+	"github.com/gardener/gardener-extension-provider-aws/pkg/helmvalues"
 	"github.com/gardener/gardener/extensions/pkg/controller"
 	controllercmd "github.com/gardener/gardener/extensions/pkg/controller/cmd"
 	"github.com/gardener/gardener/extensions/pkg/controller/worker"
@@ -177,6 +178,7 @@ func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 			reconcileOpts.Completed().Apply(&awsworker.DefaultAddOptions.IgnoreOperationAnnotation)
 			workerCtrlOpts.Completed().Apply(&awsworker.DefaultAddOptions.Controller)
 
+			helmvalues.Load(configFileOpts.Completed().Config.OverrideHelmValues)
 			_, shootWebhooks, err := webhookOptions.Completed().AddToManager(mgr)
 			if err != nil {
 				controllercmd.LogErrAndExit(err, "Could not add webhooks to manager")
