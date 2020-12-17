@@ -28,7 +28,6 @@ import (
 	"github.com/gardener/gardener-extension-provider-aws/pkg/aws"
 	awsclient "github.com/gardener/gardener-extension-provider-aws/pkg/aws/client"
 
-	"github.com/aws/aws-sdk-go/service/sts"
 	extensionscontroller "github.com/gardener/gardener/extensions/pkg/controller"
 	controllererrors "github.com/gardener/gardener/extensions/pkg/controller/error"
 	"github.com/gardener/gardener/extensions/pkg/terraformer"
@@ -79,16 +78,13 @@ func Reconcile(
 
 		roleArn := os.Getenv("AWS_ROLE_ARN")
 		if roleArn == "" {
-			return nil, nil, fmt.Errorf("must special Role ARN env when AWS AKSK not used")
+			return nil, nil, fmt.Errorf("must specify AWS_ROLE_ARN env when AWS AKSK not used")
 		}
-		// An identifier for the assumed role session.
 
+		// An identifier for the assumed role session.
 		roleSessionName := "aws-infra-terraformer-" + infrastructure.ObjectMeta.Name
-		ari := &sts.AssumeRoleInput{
-			RoleArn:         &roleArn,
-			RoleSessionName: &roleSessionName,
-		}
-		assumeRoleOutput, err := awsClient.AssumeRole(ari)
+
+		assumeRoleOutput, err := awsClient.AssumeRole(roleArn, roleSessionName)
 		if err != nil {
 			return nil, nil, err
 		}

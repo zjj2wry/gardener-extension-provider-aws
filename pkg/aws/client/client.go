@@ -35,6 +35,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+var _ Interface = new(Client)
+
 // Client is a struct containing several clients for the different AWS services it needs to interact with.
 // * EC2 is the standard client for the EC2 service.
 // * STS is the standard client for the STS service.
@@ -94,8 +96,13 @@ func (c *Client) GetAccountID(ctx context.Context) (string, error) {
 }
 
 // AssumeRole API operation for AWS Security Token Service.
-func (c *Client) AssumeRole(input *sts.AssumeRoleInput) (*sts.AssumeRoleOutput, error) {
-	return c.STS.AssumeRole(input)
+func (c *Client) AssumeRole(roleArn, roleSessionName string) (*sts.AssumeRoleOutput, error) {
+	ari := &sts.AssumeRoleInput{
+		RoleArn:         &roleArn,
+		RoleSessionName: &roleSessionName,
+	}
+
+	return c.STS.AssumeRole(ari)
 }
 
 // GetInternetGateway returns the ID of the internet gateway attached to the given VPC <vpcID>.

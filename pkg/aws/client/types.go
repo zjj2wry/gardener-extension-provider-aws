@@ -50,5 +50,5 @@ type Interface interface {
 	DeleteSecurityGroup(ctx context.Context, id string) error
 
 	// sts
-	AssumeRole(input *sts.AssumeRoleInput) (*sts.AssumeRoleOutput, error)
+	AssumeRole(roleArn, roleSessionName string) (*sts.AssumeRoleOutput, error)
 }
