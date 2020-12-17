@@ -17,6 +17,7 @@ package infrastructure
 import (
 	"context"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -65,6 +66,32 @@ func Reconcile(
 ) {
 
 	credentials := aws.GetCredentialsFromSecretRef(ctx, c, infrastructure.Spec.SecretRef)
+
+	// if static credentials not used, we will trying assume role.
+	// aws client will call AssumeRole API to get temporary credentials
+	if string(credentials.AccessKeyID) == "" || string(credentials.SecretAccessKey) == "" {
+		// use EC2 META or WBE Identity provider initialize client
+		awsClient, err := awsclient.NewClient("", "", "")
+		if err != nil {
+			return nil, nil, err
+		}
+
+		roleArn := os.Getenv("AWS_ROLE_ARN")
+		if roleArn == "" {
+			return nil, nil, fmt.Errorf("must specify AWS_ROLE_ARN env when AWS AKSK not used")
+		}
+
+		// An identifier for the assumed role session.
+		roleSessionName := "aws-infra-terraformer-" + infrastructure.ObjectMeta.Name
+
+		assumeRoleOutput, err := awsClient.AssumeRole(ctx, roleArn, roleSessionName)
+		if err != nil {
+			return nil, nil, err
+		}
+		credentials.AccessKeyID = []byte(*assumeRoleOutput.Credentials.AccessKeyId)
+		credentials.SecretAccessKey = []byte(*assumeRoleOutput.Credentials.SecretAccessKey)
+		credentials.SessionToken = *assumeRoleOutput.Credentials.SessionToken
+	}
 
 	infrastructureConfig := &awsapi.InfrastructureConfig{}
 	if _, _, err := decoder.Decode(infrastructure.Spec.ProviderConfig.Raw, nil, infrastructureConfig); err != nil {

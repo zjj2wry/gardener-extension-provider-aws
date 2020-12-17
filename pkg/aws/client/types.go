@@ -16,6 +16,8 @@ package client
 
 import (
 	"context"
+
+	"github.com/aws/aws-sdk-go/service/sts"
 )
 
 const (
@@ -46,4 +48,7 @@ type Interface interface {
 	DeleteELB(ctx context.Context, name string) error
 	DeleteELBV2(ctx context.Context, arn *string) error
 	DeleteSecurityGroup(ctx context.Context, id string) error
+
+	// sts
+	AssumeRole(ctx context.Context, roleArn, roleSessionName string) (*sts.AssumeRoleOutput, error)
 }
