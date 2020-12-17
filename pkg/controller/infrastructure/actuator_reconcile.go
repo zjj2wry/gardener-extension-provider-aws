@@ -84,7 +84,7 @@ func Reconcile(
 		// An identifier for the assumed role session.
 		roleSessionName := "aws-infra-terraformer-" + infrastructure.ObjectMeta.Name
 
-		assumeRoleOutput, err := awsClient.AssumeRole(roleArn, roleSessionName)
+		assumeRoleOutput, err := awsClient.AssumeRole(ctx, roleArn, roleSessionName)
 		if err != nil {
 			return nil, nil, err
 		}

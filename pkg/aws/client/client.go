@@ -96,13 +96,13 @@ func (c *Client) GetAccountID(ctx context.Context) (string, error) {
 }
 
 // AssumeRole API operation for AWS Security Token Service.
-func (c *Client) AssumeRole(roleArn, roleSessionName string) (*sts.AssumeRoleOutput, error) {
+func (c *Client) AssumeRole(ctx context.Context, roleArn, roleSessionName string) (*sts.AssumeRoleOutput, error) {
 	ari := &sts.AssumeRoleInput{
 		RoleArn:         &roleArn,
 		RoleSessionName: &roleSessionName,
 	}
 
-	return c.STS.AssumeRole(ari)
+	return c.STS.AssumeRoleWithContext(ctx, ari)
 }
 
 // GetInternetGateway returns the ID of the internet gateway attached to the given VPC <vpcID>.
