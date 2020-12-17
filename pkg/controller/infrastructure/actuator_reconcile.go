@@ -71,15 +71,19 @@ func Reconcile(
 	// if static credentials not used, we will trying assume role.
 	// aws client will call AssumeRole API to get temporary credentials
 	if string(credentials.AccessKeyID) == "" || string(credentials.SecretAccessKey) == "" {
-		awsClient, err := awsclient.NewClient(string(credentials.AccessKeyID), string(credentials.SecretAccessKey), "")
+		// use EC2 META or WBE Identity provider initialize client
+		awsClient, err := awsclient.NewClient("", "", "")
 		if err != nil {
 			return nil, nil, err
 		}
 
-		// An identifier for the assumed role session.
-		roleSessionName := "terraform_role_session_name"
-
 		roleArn := os.Getenv("AWS_ROLE_ARN")
+		if roleArn == "" {
+			return nil, nil, fmt.Errorf("must special Role ARN env when AWS AKSK not used")
+		}
+		// An identifier for the assumed role session.
+
+		roleSessionName := "aws-infra-terraformer-" + infrastructure.ObjectMeta.Name
 		ari := &sts.AssumeRoleInput{
 			RoleArn:         &roleArn,
 			RoleSessionName: &roleSessionName,
