@@ -22,7 +22,7 @@ images:
 - name: machine-controller-manager
   sourceRepository: github.com/pingcap/machine-controller-manager
   repository: gcr.io/pingcap-public/gardener/machine-controller-manager
-  tag: "v0.29.0-dev.2"
+  tag: "v0.29.0-dev.3"
 - name: aws-lb-readvertiser
   sourceRepository: github.com/gardener/aws-lb-readvertiser
   repository: eu.gcr.io/gardener-project/gardener/aws-lb-readvertiser
