@@ -178,7 +178,7 @@ spec:
         volumeMounts:
         - name: socket-dir
           mountPath: /csi
-
+      serviceAccountName: csi-driver-controller
       volumes:
       - name: socket-dir
         emptyDir: {}

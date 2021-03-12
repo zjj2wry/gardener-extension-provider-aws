@@ -501,7 +501,7 @@ func getCSIControllerChartValues(
 		return map[string]interface{}{"enabled": false}, nil
 	}
 
-	return map[string]interface{}{
+	values := map[string]interface{}{
 		"enabled":  true,
 		"replicas": extensionscontroller.GetControlPlaneReplicas(cluster, scaledDown, 1),
 		"region":   cp.Spec.Region,
@@ -518,7 +518,11 @@ func getCSIControllerChartValues(
 				"checksum/secret-" + aws.CSISnapshotControllerName: checksums[aws.CSISnapshotControllerName],
 			},
 		},
-	}, nil
+	}
+
+	overrideValues := helmvalues.HelmValuesFor(helmvalues.CsiDriverController)
+	logger.Info("override helm values for", "mcm", overrideValues)
+	return utils.MergeMaps(values, overrideValues), nil
 }
 
 // getControlPlaneShootChartValues collects and returns the control plane shoot chart values.

@@ -5,6 +5,7 @@ import "k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 const (
 	MachineControllerManager = "machine-controller-manager"
 	CloudControllerManager   = "cloud-controller-manager"
+	CsiDriverController = "csi-driver-controller"
 )
 
 var OverrideHelmValues *unstructured.Unstructured
