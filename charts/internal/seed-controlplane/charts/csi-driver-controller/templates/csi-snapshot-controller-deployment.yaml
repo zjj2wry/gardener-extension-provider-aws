@@ -42,6 +42,7 @@ spec:
         volumeMounts:
         - name: csi-snapshot-controller
           mountPath: /var/lib/csi-snapshot-controller
+      serviceAccountName: csi-driver-controller
       volumes:
       - name: csi-snapshot-controller
         secret:
