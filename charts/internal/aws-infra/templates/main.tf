@@ -61,12 +61,21 @@ resource "aws_route" "public" {
   route_table_id         = "${aws_route_table.routetable_main.id}"
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = "{{ required "vpc.internetGatewayID is required" .Values.vpc.internetGatewayID }}"
+
+  timeouts {
+    create = "5m"
+  }
 }
 
 resource "aws_security_group" "nodes" {
   name        = "{{ required "clusterName is required" .Values.clusterName }}-nodes"
   description = "Security group for nodes"
   vpc_id      = "{{ required "vpc.id is required" .Values.vpc.id }}"
+
+  timeouts {
+    create = "5m"
+    delete = "5m"
+  }
 
 {{ include "aws-infra.tags-with-suffix" (set $.Values "suffix" "nodes") | indent 2 }}
 }
@@ -104,6 +113,11 @@ resource "aws_subnet" "nodes_z{{ $index }}" {
   cidr_block        = "{{ required "zone.worker is required" $zone.worker }}"
   availability_zone = "{{ required "zone.name is required" $zone.name }}"
 
+  timeouts {
+    create = "5m"
+    delete = "5m"
+  }
+
 {{ include "aws-infra.tags-with-suffix" (set $.Values "suffix" (print "nodes-z" $index)) | indent 2 }}
 }
 
@@ -115,6 +129,11 @@ resource "aws_subnet" "private_utility_z{{ $index }}" {
   vpc_id            = "{{ required "vpc.id is required" $.Values.vpc.id }}"
   cidr_block        = "{{ required "zone.internal is required" $zone.internal }}"
   availability_zone = "{{ required "zone.name is required" $zone.name }}"
+
+  timeouts {
+    create = "5m"
+    delete = "5m"
+  }
 
   tags = {
     Name = "{{ required "clusterName is required" $.Values.clusterName }}-private-utility-z{{ $index }}"
@@ -145,6 +164,11 @@ resource "aws_subnet" "public_utility_z{{ $index }}" {
   vpc_id            = "{{ required "vpc.id is required" $.Values.vpc.id }}"
   cidr_block        = "{{ required "zone.public is required" $zone.public }}"
   availability_zone = "{{ required "zone.name is required" $zone.name }}"
+
+  timeouts {
+    create = "5m"
+    delete = "5m"
+  }
 
   tags = {
     Name = "{{ required "clusterName is required" $.Values.clusterName }}-public-utility-z{{ $index }}"
@@ -233,53 +257,6 @@ resource "aws_route_table_association" "routetable_private_utility_z{{ $index }}
 //=====================================================================
 //= IAM instance profiles
 //=====================================================================
-
-resource "aws_iam_role" "bastions" {
-  name = "{{ required "clusterName is required" .Values.clusterName }}-bastions"
-  path = "/"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_instance_profile" "bastions" {
-  name = "{{ required "clusterName is required" .Values.clusterName }}-bastions"
-  role = "${aws_iam_role.bastions.name}"
-}
-
-resource "aws_iam_role_policy" "bastions" {
-  name = "{{ required "clusterName is required" .Values.clusterName }}-bastions"
-  role = "${aws_iam_role.bastions.id}"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DescribeRegions"
-      ],
-      "Resource": [
-        "*"
-      ]
-    }
-  ]
-}
-EOF
-}
 
 resource "aws_iam_role" "nodes" {
   name = "{{ required "clusterName is required" .Values.clusterName }}-nodes"
